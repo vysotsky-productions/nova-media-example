@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use App\SavePhoto;
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Text;
@@ -64,17 +65,17 @@ class User extends Resource
 
 
             NovaPhotoField::make('Превью', 'preview')
-//                ->handleClass(SavePhoto::class)
                 ->params([
-                    'folder'  => 'dresses-preview',
-                    'thumbs'  => config('thumbs.dresses-preview'),
+                    'folder'  => 'persons/avatar',
+                    'thumbs'  => config('thumbs.user'),
                     'cropper' => true,
                     'ratio'   => 3 / 4,
                 ])
-                ->getPhoto('preview_url')
+                ->getPhoto('original_url')
+                ->getPhotoForm('preview_url')
+                ->handleClass(SavePhoto::class)
 //                ->getPhotoDetail('previewDetailUrl')
-//                ->getPhotoForm('previewUrl')
-//                ->getPhotoIndex('previewUrl')
+//                ->getPhotoIndex('previewUrl'  )
         ];
     }
 

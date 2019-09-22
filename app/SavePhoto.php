@@ -33,25 +33,6 @@ class SavePhoto
         Storage::disk('public')->putFileAs($this->path, $file, $filename);
 
         $this->handleCrop($filename, $cropData);
-//        $cropped = Image::make($file)
-//            ->crop((int)$cropData->width, (int)$cropData->height, (int)$cropData->x, (int)$cropData->y)
-//            ->encode('jpeg', 100);
-//
-//        Storage::disk('public')->put($this->path . '/cropped/' . $filename, $cropped);
-//
-//        foreach ($this->config as $thumbFolder => $thumbSize) {
-//
-//            if ($thumbSize['width'] && $thumbSize['height']) {
-//                $cropped->fit($thumbSize['width'], $thumbSize['height']);
-//            } else {
-//                $cropped->resize($thumbSize['width'], $thumbSize['height'], function ($constraint) {
-//                    $constraint->aspectRatio();
-//                });
-//            }
-//
-//            Storage::disk('public')->put($this->path . '/thumbs/' . $thumbFolder . '/' . $filename, $cropped->encode('jpg', 90));
-//
-//        }
 
         $name = collect(explode('.', $filename))
             ->slice(0, -1)
@@ -101,14 +82,14 @@ class SavePhoto
         }
     }
 
-    public function handleCrop($filename, $cropData)
+    public function handleCrop($filename, $cropData = false)
     {
         $file = Storage::disk('public')->get($this->path . "/" . $filename);
 
-
-        $cropped = Image::make($file)
+        $cropped = $cropData ? Image::make($file)
             ->crop((int)$cropData->width, (int)$cropData->height, (int)$cropData->x, (int)$cropData->y)
-            ->encode('jpeg', 100);
+            ->encode('jpeg', 100)
+            : Image::make($file)->encode('jpeg', 100);
 
         Storage::disk('public')->put($this->path . '/cropped/' . $filename, $cropped);
 
@@ -123,7 +104,7 @@ class SavePhoto
                 });
             }
 
-            Storage::disk('public')->put($this->path . '/thumbs/' . $thumbFolder . '/' . $filename, $image->encode('jpg', 90));
+            Storage::disk('public')->put($this->path . '/thumbs/' . $thumbFolder . '/' . $filename, $image->encode('jpeg', 90));
 
         }
 

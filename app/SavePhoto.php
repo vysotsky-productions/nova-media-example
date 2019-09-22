@@ -14,94 +14,106 @@ use Intervention\Image\Facades\Image;
 
 class SavePhoto
 {
-    public static function save($file, $cropData, $path, $config)
+
+    protected $path;
+    protected $config;
+
+    public function __construct($path, $config)
     {
+
+        $this->path = $path;
+        $this->config = $config;
+    }
+
+    public function save($file, $cropData)
+    {
+
         $filename = $file->hashName();
 
+        Storage::disk('public')->putFileAs($this->path, $file, $filename);
 
-        $original = Storage::disk('public')->putFileAs($path, $file, $filename);
-
-        $cropped = Image::make($file)
-            ->crop((int)$cropData->width, (int)$cropData->height, (int)$cropData->x, (int)$cropData->y)
-            ->encode('jpeg', 50);
-
-        Storage::disk('public')->put($path . '/cropped/' . $filename, $cropped);
-
-        $image = $cropped;
-        foreach ($config as $thumbFolder => $thumbSize) {
-
-            if ($thumbSize['width'] && $thumbSize['height']) {
-                $image->fit($thumbSize['width'], $thumbSize['height']);
-            } else {
-                $image->resize($thumbSize['width'], $thumbSize['height'], function ($constraint) {
-                    $constraint->aspectRatio();
-                });
-            }
-
-            Storage::disk('public')->put($path . '/thumbs/' . $thumbFolder . '/' . $filename, $image->encode('jpg', 90));
-
-        }
+        $this->handleCrop($filename, $cropData);
+//        $cropped = Image::make($file)
+//            ->crop((int)$cropData->width, (int)$cropData->height, (int)$cropData->x, (int)$cropData->y)
+//            ->encode('jpeg', 100);
+//
+//        Storage::disk('public')->put($this->path . '/cropped/' . $filename, $cropped);
+//
+//        foreach ($this->config as $thumbFolder => $thumbSize) {
+//
+//            if ($thumbSize['width'] && $thumbSize['height']) {
+//                $cropped->fit($thumbSize['width'], $thumbSize['height']);
+//            } else {
+//                $cropped->resize($thumbSize['width'], $thumbSize['height'], function ($constraint) {
+//                    $constraint->aspectRatio();
+//                });
+//            }
+//
+//            Storage::disk('public')->put($this->path . '/thumbs/' . $thumbFolder . '/' . $filename, $cropped->encode('jpg', 90));
+//
+//        }
 
         $name = collect(explode('.', $filename))
             ->slice(0, -1)
             ->join('');
         $ext = collect(explode('.', $filename))->last();
-        $newMedia = Media::create([
+
+        return Media::create([
             'name' => $name,
-            'path' => $path,
+            'path' => $this->path,
             'ext' => $ext
         ]);
 
-        return $newMedia;
-
     }
 
-    public static function update($id, $config, $path, $cropData)
-    {
-        $media = Media::find($id);
-
-        $filename = $media->name . "." . $media->ext;
-        self::deleteCroppedImages($config, $path, $filename);
-
-        self::handleCrop($config, $path, $filename, $cropData);
-    }
-
-    public static function delete($id, $config, $path)
+    public function update($id, $cropData)
     {
         $media = Media::find($id);
 
         $filename = $media->name . "." . $media->ext;
 
-        Storage::disk('public')->delete($path . "/" . $filename);
+        $this->deleteCroppedImages($filename);
 
-        self::deleteCroppedImages($config, $path, $filename);
+        $this->handleCrop($filename, $cropData);
+
+    }
+
+    public function delete($id)
+    {
+        $media = Media::find($id);
+
+        $filename = $media->name . "." . $media->ext;
+
+        Storage::disk('public')->delete($this->path . "/" . $filename);
+
+        $this->deleteCroppedImages($filename);
 
         $media->delete();
 
     }
 
-    public static function deleteCroppedImages($config, $path, $filename)
+    public function deleteCroppedImages($filename)
     {
-        Storage::disk('public')->delete($path . '/cropped/' . $filename);
+        Storage::disk('public')->delete($this->path . '/cropped/' . $filename);
 
-        foreach ($config as $thumbFolder => $thumbSize) {
-            Storage::disk('public')->delete($path . '/thumbs/' . $thumbFolder . '/' . $filename);
+        foreach ($this->config as $thumbFolder => $thumbSize) {
+            Storage::disk('public')->delete($this->path . '/thumbs/' . $thumbFolder . '/' . $filename);
         }
     }
 
-    public static function handleCrop($config, $path, $filename, $cropData)
+    public function handleCrop($filename, $cropData)
     {
-        $file = Storage::disk('public')->get($path . "/" . $filename);
+        $file = Storage::disk('public')->get($this->path . "/" . $filename);
 
 
         $cropped = Image::make($file)
             ->crop((int)$cropData->width, (int)$cropData->height, (int)$cropData->x, (int)$cropData->y)
             ->encode('jpeg', 100);
 
-        Storage::disk('public')->put($path . '/cropped/' . $filename, $cropped);
+        Storage::disk('public')->put($this->path . '/cropped/' . $filename, $cropped);
 
         $image = $cropped;
-        foreach ($config as $thumbFolder => $thumbSize) {
+        foreach ($this->config as $thumbFolder => $thumbSize) {
 
             if ($thumbSize['width'] && $thumbSize['height']) {
                 $image->fit($thumbSize['width'], $thumbSize['height']);
@@ -111,7 +123,7 @@ class SavePhoto
                 });
             }
 
-            Storage::disk('public')->put($path . '/thumbs/' . $thumbFolder . '/' . $filename, $image->encode('jpg', 90));
+            Storage::disk('public')->put($this->path . '/thumbs/' . $thumbFolder . '/' . $filename, $image->encode('jpg', 90));
 
         }
 

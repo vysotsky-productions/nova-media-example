@@ -65,17 +65,14 @@ class User extends Resource
 
 
             NovaPhotoField::make('Превью', 'preview')
-                ->params([
-                    'ratio' => 3 / 4,
-                ])
-                ->useCropper(true)
+//                ->aspectRatio(3/4)
                 ->getPhoto('original_url')
                 ->getPhotoForm('preview_url')
+                ->getPhotoDetail('preview_url')
+                ->getPhotoIndex('preview_url'  )
                 ->setHandler(
                     new SavePhoto('persons/avatar', config('thumbs.user.persons/avatar'))
                 )
-//                ->getPhotoDetail('previewDetailUrl')
-//                ->getPhotoIndex('previewUrl'  )
         ];
     }
 

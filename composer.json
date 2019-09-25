@@ -11,9 +11,10 @@
         "php": "^7.2",
         "fideloper/proxy": "^4.0",
         "laravel/framework": "^6.0",
+        "laravel/nova": "2.1.1",
         "laravel/tinker": "^1.0",
-        "laravel/nova": "*",
-        "vysotsky-productions/nova-photo-filed": "*"
+        "van-ons/laraberg": "^1.0",
+        "vysotsky-productions/nova-gutenberg": "@dev"
     },
     "require-dev": {
         "facade/ignition": "^1.4",
@@ -65,9 +66,10 @@
             "type": "composer",
             "url": "https://nova.laravel.com"
         },
+
         {
             "type": "path",
-            "url": "./../nova-photo-filed",
+            "url": "./../nova-gutenberg",
             "symlink": true
         }
     ]

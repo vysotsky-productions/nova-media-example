@@ -13,4 +13,13 @@
 
 Route::get('/', function () {
     return view('welcome');
+//    echo phpversion();
+//
+//    $user = new \App\User();
+//
+//    $user->password = \Illuminate\Support\Facades\Hash::make('asdfasdfadsfasd');
+//    $user->name = 'test';
+//    $user->email = 'tlajiosdijfest@dafkasdfa.df';
+//
+//    $user->save();
 });

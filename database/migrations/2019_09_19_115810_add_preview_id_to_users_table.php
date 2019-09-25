@@ -14,7 +14,8 @@ class AddPreviewIdToUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->unsignedInteger('preview_id');
+            $table->unsignedInteger('preview_id')->nullable();
+            $table->text('content')->nullable();
         });
     }
 
@@ -27,6 +28,7 @@ class AddPreviewIdToUsersTable extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->dropColumn('preview_id');
+            $table->dropColumn('content');
         });
     }
 }

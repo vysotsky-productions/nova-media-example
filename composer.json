@@ -13,7 +13,7 @@
         "laravel/framework": "^6.0",
         "laravel/tinker": "^1.0",
         "laravel/nova": "*",
-        "vysotsky-productions/nova-photo-filed": "*"
+        "vysotsky-productions/nova-photo-field": "*"
     },
     "require-dev": {
         "facade/ignition": "^1.4",
@@ -67,7 +67,7 @@
         },
         {
             "type": "path",
-            "url": "./../nova-photo-filed",
+            "url": "./../nova-photo-field",
             "symlink": true
         }
     ]

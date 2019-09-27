@@ -41,4 +41,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Media::class);
     }
+
+    public function album()
+    {
+        return $this->belongsTo(Album::class);
+    }
 }

@@ -3,11 +3,14 @@
 namespace App\Nova;
 
 use App\SavePhoto;
+use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\HasOne;
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Gravatar;
 use Laravel\Nova\Fields\Password;
+use VysotskyProductions\NovaGalleryField\NovaGalleryField;
 use VysotskyProductions\NovaPhotoFiled\NovaPhotoField;
 
 class User extends Resource
@@ -38,7 +41,7 @@ class User extends Resource
     /**
      * Get the fields displayed by the resource.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      * @return array
      */
     public function fields(Request $request)
@@ -63,13 +66,29 @@ class User extends Resource
                 ->creationRules('required', 'string', 'min:8')
                 ->updateRules('nullable', 'string', 'min:8'),
 
+            BelongsTo::make('Альбом', 'album', Album::class),
+
 
             NovaPhotoField::make('Превью', 'preview')
 //                ->aspectRatio(3/4)
                 ->getPhoto('original_url')
                 ->getPhotoForm('preview_url')
                 ->getPhotoDetail('preview_url')
-                ->getPhotoIndex('preview_url'  )
+                ->getPhotoIndex('preview_url')
+                ->setHandler(
+                    new SavePhoto('persons/avatar', config('thumbs.user.persons/avatar'))
+                ),
+
+            NovaGalleryField::make('Альбом', $this->album()->with('media')->get() )
+//                ->aspectRatio(3/4)
+                ->getPhoto('original_url')
+                ->getPhotoForm('preview_url')
+                ->getPhotoDetail('preview_url')
+                ->getPhotoIndex('preview_url')
+                ->setCustomGalleryFields([
+                    Text::make('name'),
+                    Text::make('description')
+                ])
                 ->setHandler(
                     new SavePhoto('persons/avatar', config('thumbs.user.persons/avatar'))
                 )
@@ -79,7 +98,7 @@ class User extends Resource
     /**
      * Get the cards available for the request.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      * @return array
      */
     public function cards(Request $request)
@@ -90,7 +109,7 @@ class User extends Resource
     /**
      * Get the filters available for the resource.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      * @return array
      */
     public function filters(Request $request)
@@ -101,7 +120,7 @@ class User extends Resource
     /**
      * Get the lenses available for the resource.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      * @return array
      */
     public function lenses(Request $request)
@@ -112,7 +131,7 @@ class User extends Resource
     /**
      * Get the actions available for the resource.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      * @return array
      */
     public function actions(Request $request)

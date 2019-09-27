@@ -10,6 +10,11 @@ class Media extends Model
     protected $guarded = ['id'];
     protected $appends = ['preview_url', 'original_url', 'full_path'];
 
+    public function albums()
+    {
+        $this->belongsToMany(Album::class, 'media_album');
+    }
+
     public function getPreviewUrlAttribute()
     {
         return Storage::url($this->path . "/cropped/" . $this->name . "." . $this->ext);

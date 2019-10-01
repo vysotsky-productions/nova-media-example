@@ -4151,7 +4151,8 @@
             "dist": {
                 "type": "path",
                 "url": "./../nova-gallery-field",
-                "reference": "94a28a314e3d1acea7a7655d30b95153987f82e6"
+                "reference": "b32c0ea801f5482b2323545f32a6c9ad3ec6d684",
+                "shasum": null
             },
             "require": {
                 "php": "^7.2"
@@ -4184,7 +4185,8 @@
             "dist": {
                 "type": "path",
                 "url": "./../nova-photo-field",
-                "reference": "2a7e254dbe1111c81e93cdb2d0e55e6f7611bda4"
+                "reference": "65d9f2effa428486e1a4e7fbef9db482372b6915",
+                "shasum": null
             },
             "require": {
                 "php": "^7.2"
@@ -4325,16 +4327,16 @@
         },
         {
             "name": "facade/ignition",
-            "version": "1.8.2",
+            "version": "1.8.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/facade/ignition.git",
-                "reference": "4ff9397a24da58b35382802e2d22325b640123ea"
+                "reference": "d951e4bc3bdc519838a0438f8e7b0637f8470f39"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/facade/ignition/zipball/4ff9397a24da58b35382802e2d22325b640123ea",
-                "reference": "4ff9397a24da58b35382802e2d22325b640123ea",
+                "url": "https://api.github.com/repos/facade/ignition/zipball/d951e4bc3bdc519838a0438f8e7b0637f8470f39",
+                "reference": "d951e4bc3bdc519838a0438f8e7b0637f8470f39",
                 "shasum": ""
             },
             "require": {
@@ -4389,7 +4391,7 @@
                 "laravel",
                 "page"
             ],
-            "time": "2019-09-20T09:37:06+00:00"
+            "time": "2019-09-26T22:53:50+00:00"
         },
         {
             "name": "facade/ignition-contracts",
@@ -5464,18 +5466,18 @@
             "authors": [
                 {
                     "name": "Geert Bergman",
-                    "role": "Project Author",
-                    "homepage": "http://www.scrivo.org/"
+                    "homepage": "http://www.scrivo.org/",
+                    "role": "Project Author"
                 },
                 {
                     "name": "Vladimir Jimenez",
-                    "role": "Contributor",
-                    "homepage": "https://allejo.io"
+                    "homepage": "https://allejo.io",
+                    "role": "Contributor"
                 },
                 {
                     "name": "Martin Folkers",
-                    "role": "Contributor",
-                    "homepage": "https://twobrain.io"
+                    "homepage": "https://twobrain.io",
+                    "role": "Contributor"
                 }
             ],
             "description": "Server side syntax highlighter that supports 185 languages. It's a PHP port of highlight.js",

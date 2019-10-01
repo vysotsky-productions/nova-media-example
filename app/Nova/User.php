@@ -3,6 +3,7 @@
 namespace App\Nova;
 
 use App\SavePhoto;
+use App\SavePhotoCollection;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\HasOne;
 use Laravel\Nova\Fields\ID;
@@ -66,7 +67,7 @@ class User extends Resource
                 ->creationRules('required', 'string', 'min:8')
                 ->updateRules('nullable', 'string', 'min:8'),
 
-            BelongsTo::make('Альбом', 'album', Album::class),
+//            BelongsTo::make('Альбом', 'album', Album::class)->nullable(),
 
 
             NovaPhotoField::make('Превью', 'preview')
@@ -79,7 +80,7 @@ class User extends Resource
                     new SavePhoto('persons/avatar', config('thumbs.user.persons/avatar'))
                 ),
 
-            NovaGalleryField::make('Альбом', $this->album()->with('media')->get() )
+            NovaGalleryField::make('Альбом', $this->album )
 //                ->aspectRatio(3/4)
                 ->getPhoto('original_url')
                 ->getPhotoForm('preview_url')
@@ -90,7 +91,9 @@ class User extends Resource
                     Text::make('description')
                 ])
                 ->setHandler(
-                    new SavePhoto('persons/avatar', config('thumbs.user.persons/avatar'))
+                    new SavePhotoCollection(
+                        new SavePhoto('persons/album', config('thumbs.user.persons/avatar'))
+                    )
                 )
         ];
     }

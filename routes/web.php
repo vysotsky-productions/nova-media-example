@@ -14,3 +14,10 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+Route::post('/test', function () {
+//    dd(request()->files);
+    dd(request()->all());
+    return request()->all();
+});

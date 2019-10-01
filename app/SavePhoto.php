@@ -25,6 +25,11 @@ class SavePhoto
         $this->config = $config;
     }
 
+    /**
+     * @param $file
+     * @param $cropData
+     * @return mixed
+     */
     public function save($file, $cropData)
     {
 
@@ -87,7 +92,7 @@ class SavePhoto
         $file = Storage::disk('public')->get($this->path . "/" . $filename);
 
         $cropped = $cropData ? Image::make($file)
-            ->crop((int)$cropData->width, (int)$cropData->height, (int)$cropData->x, (int)$cropData->y)
+            ->crop((int)$cropData['width'], (int)$cropData['height'], (int)$cropData['x'], (int)$cropData['y'])
             ->encode('jpeg', 100)
             : Image::make($file)->encode('jpeg', 100);
 

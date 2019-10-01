@@ -5,6 +5,7 @@ namespace App\Nova;
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Image;
+use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Media extends Resource
@@ -43,6 +44,8 @@ class Media extends Resource
         return [
             ID::make()->sortable(),
 //            Image::make('Превью', 'preview_url')->onlyOnIndex(),
+            Text::make('Папка', 'path'),
+            Text::make('Название', 'name'),
             Image::make('Оригинал', 'full_path'),
         ];
     }

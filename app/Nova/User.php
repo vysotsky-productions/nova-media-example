@@ -5,6 +5,7 @@ namespace App\Nova;
 use App\SavePhoto;
 use App\SavePhotoCollection;
 use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\HasOne;
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
@@ -68,7 +69,7 @@ class User extends Resource
                 ->updateRules('nullable', 'string', 'min:8'),
 
 //            BelongsTo::make('Альбом', 'album', Album::class)->nullable(),
-
+            BelongsToMany::make('Галереи', 'albums', Album::class),
 
             NovaPhotoField::make('Превью', 'preview')
 //                ->aspectRatio(3/4)
@@ -80,7 +81,7 @@ class User extends Resource
                     new SavePhoto('persons/avatar', config('thumbs.user.persons/avatar'))
                 ),
 
-            NovaGalleryField::make('Альбом', $this->album )
+            NovaGalleryField::make('Альбом', $this->album)
 //                ->aspectRatio(3/4)
                 ->getPhoto('original_url')
                 ->getPhotoForm('preview_url')
@@ -90,9 +91,29 @@ class User extends Resource
                     Text::make('name'),
                     Text::make('description')
                 ])
+                ->setSortable('order')
+                ->cropBoxDataField('crop_data')
                 ->setHandler(
                     new SavePhotoCollection(
                         new SavePhoto('persons/album', config('thumbs.user.persons/avatar'))
+                    )
+                ),
+            NovaGalleryField::make('Альбом', $this->albums, 'albums')
+//                ->aspectRatio(3/4)
+                ->getPhoto('original_url')
+                ->getPhotoForm('preview_url')
+                ->getPhotoDetail('preview_url')
+                ->getPhotoIndex('preview_url')
+                ->cropBoxDataField('crop_data')
+                ->setCustomGalleryFields([
+                    Text::make('name'),
+                    Text::make('description')
+                ])
+                ->multiple()
+                ->setSortable('order')
+                ->setHandler(
+                    new SavePhotoCollection(
+                        new SavePhoto('persons/albums', config('thumbs.user.persons/avatar'))
                     )
                 )
         ];

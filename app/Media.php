@@ -9,6 +9,9 @@ class Media extends Model
 {
     protected $guarded = ['id'];
     protected $appends = ['preview_url', 'original_url', 'full_path'];
+    protected $casts = [
+        'crop_data' => 'array'
+    ];
 
     public function albums()
     {

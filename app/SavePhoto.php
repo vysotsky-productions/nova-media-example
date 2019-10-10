@@ -47,6 +47,7 @@ class SavePhoto
         return Media::create([
             'name' => $name,
             'path' => $this->path,
+            'crop_data' => $cropData,
             'ext' => $ext
         ]);
 
@@ -61,6 +62,8 @@ class SavePhoto
         $this->deleteCroppedImages($filename);
 
         $this->handleCrop($filename, $cropData);
+
+        $media->update(['crop_data' => $cropData]);
 
     }
 

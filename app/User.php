@@ -46,4 +46,12 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Album::class)->with('media');
     }
+
+    public function albums()
+    {
+        return $this->belongsToMany(Album::class)
+            ->withPivot('order')
+            ->orderBy('album_user.order')
+            ->with('media');
+    }
 }

@@ -10,7 +10,9 @@ class Album extends Model
 
     public function media()
     {
-        return $this->belongsToMany(Media::class, 'media_album');
+        return $this->belongsToMany(Media::class, 'media_album')
+            ->withPivot('order')
+            ->orderBy('media_album.order');
     }
 
     public function user()

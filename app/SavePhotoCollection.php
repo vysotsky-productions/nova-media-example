@@ -41,8 +41,10 @@ class SavePhotoCollection
         });
     }
 
-    public function delete()
+    public function delete($deleted)
     {
-        
+        collect($deleted)->each(function ($id) {
+            $this->savePhoto->delete($id);
+        });
     }
 }

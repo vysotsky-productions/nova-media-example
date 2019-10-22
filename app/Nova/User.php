@@ -69,7 +69,7 @@ class User extends Resource
                 ->updateRules('nullable', 'string', 'min:8'),
 
 //            BelongsTo::make('Альбом', 'album', Album::class)->nullable(),
-            BelongsToMany::make('Галереи', 'albums', Album::class),
+            BelongsToMany::make('Галереи', 'albums', Album::class)->onlyOnForms(),
 
             NovaPhotoField::make('Превью', 'preview')
 //                ->aspectRatio(3/4)
@@ -83,16 +83,16 @@ class User extends Resource
 
             NovaGalleryField::make('Альбом', $this->album)
 //                ->aspectRatio(3/4)
-                ->getPhoto('original_url')
-                ->getPhotoForm('preview_url')
-                ->getPhotoDetail('preview_url')
-                ->getPhotoIndex('preview_url')
+//                ->getPhoto('original_url')
+//                ->getPhotoForm('preview_url')
+//                ->getPhotoDetail('preview_url')
+//                ->getPhotoIndex('preview_url')
                 ->setCustomGalleryFields([
                     Text::make('name'),
                     Text::make('description')
                 ])
-                ->setSortable('order')
-                ->cropBoxDataField('crop_data')
+//                ->setSortable('order')
+//                ->setCropBoxDataField('crop_data')
                 ->setHandler(
                     new SavePhotoCollection(
                         new SavePhoto('persons/album', config('thumbs.user.persons/avatar'))
@@ -100,17 +100,17 @@ class User extends Resource
                 ),
             NovaGalleryField::make('Альбом', $this->albums, 'albums')
 //                ->aspectRatio(3/4)
-                ->getPhoto('original_url')
-                ->getPhotoForm('preview_url')
-                ->getPhotoDetail('preview_url')
-                ->getPhotoIndex('preview_url')
-                ->cropBoxDataField('crop_data')
+//                ->getPhoto('original_url')
+//                ->getPhotoForm('preview_url')
+//                ->getPhotoDetail('preview_url')
+//                ->getPhotoIndex('preview_url')
+//                ->setCropBoxDataField('crop_data')
                 ->setCustomGalleryFields([
                     Text::make('name'),
                     Text::make('description')
                 ])
                 ->multiple()
-                ->setSortable('order')
+//                ->setSortable('order')
                 ->setHandler(
                     new SavePhotoCollection(
                         new SavePhoto('persons/albums', config('thumbs.user.persons/avatar'))
